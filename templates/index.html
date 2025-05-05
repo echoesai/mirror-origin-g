@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Echoes</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+    }
+
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 90vh; /* Adjusted for mobile safe area */
+      padding: 1rem;
+    }
+
+    #chat {
+      flex-grow: 1;
+      overflow-y: auto;
+      margin-bottom: 1rem;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div id="chat"></div>
+    <input type="text" id="prompt" placeholder="Say something..." />
+  </div>
+
+  <script>
+    const promptInput = document.getElementById("prompt");
+    const chat = document.getElementById("chat");
+
+    promptInput.addEventListener("keypress", async function (e) {
+      if (e.key === "Enter") {
+        const userInput = promptInput.value;
+        if (!userInput.trim()) return;
+        chat.innerHTML += `<div class="user"><strong>You:</strong> ${userInput}</div>`;
+        promptInput.value = "";
+
+        const res = await fetch("/ask", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ prompt: userInput })
+        });
+
+        const data = await res.json();
+        chat.innerHTML += `<div class="echoes"><strong>Echoes:</strong> ${data.response}</div>`;
+        chat.scrollTop = chat.scrollHeight;
+      }
+    });
+  </script>
+</body>
+</html>

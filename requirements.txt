@@ -1,6 +1,8 @@
 flask
-gunicorn
-pyyaml
+flask_cors
 requests
-openai==0.28
 python-dotenv
+openai>=1.2.0
+gunicorn
+urllib3
+pyyaml

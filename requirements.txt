@@ -1,8 +1,8 @@
-flask
-flask_cors
-requests
-python-dotenv
-openai>=1.2.0
-gunicorn
-urllib3
-pyyaml
+flask==2.3.3
+flask-cors==4.0.0
+requests==2.31.0
+python-dotenv==1.0.1
+openai==1.3.7
+gunicorn==21.2.0
+urllib3==2.1.0
+pyyaml==6.0.1

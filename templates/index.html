@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mirror: Origin G.</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="stylesheet" href="/static/style.css">
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js');
+    }
+  </script>
+</head>
+<body>
+  <main>
+    <div id="chat"></div>
+    <form id="chat-form">
+      <input type="text" id="prompt" placeholder="type here…" autocomplete="off">
+      <button type="submit">send</button>
+    </form>
+  </main>
+  <script>
+    const form = document.getElementById('chat-form');
+    const chat = document.getElementById('chat');
+    const promptInput = document.getElementById('prompt');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const prompt = promptInput.value.trim();
+      if (!prompt) return;
+      chat.innerHTML += `<div class="you">you: ${prompt}</div>`;
+      promptInput.value = "";
+
+      const res = await fetch('/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      });
+      const data = await res.json();
+      chat.innerHTML += `<div class="echo">echoes: ${data.response}</div>`;
+      chat.scrollTop = chat.scrollHeight;
+    });
+  </script>
+</body>
+</html>

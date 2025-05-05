@@ -2,4 +2,4 @@ flask
 gunicorn
 pyyaml
 requests
-openai
+openai==0.28
